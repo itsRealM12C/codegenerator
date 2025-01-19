@@ -22,13 +22,29 @@
     <h1>Random Code Generator</h1>
     <label for="length">Enter code length:</label>
     <input type="number" id="length" min="1" value="5">
+    <div>
+        <input type="checkbox" id="numbersOnly">
+        <label for="numbersOnly">Generate Numbers Only</label>
+        <input type="checkbox" id="lettersOnly">
+        <label for="lettersOnly">Generate Letters Only</label>
+        <input type="checkbox" id="charactersOnly">
+        <label for="charactersOnly">Generate Characters Only</label>
+    </div>
     <button id="generate">Generate Code</button>
     <button id="copy" disabled>Copy</button>
     <div id="result"></div>
 
     <script>
-        function generateRandomCode(length) {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!"#$%&\'()*+,-./:;=?@[\\]^_`~';
+        function generateRandomCode(length, useNumbers, useLetters, useCharacters) {
+            let characters = '';
+            if (useNumbers) characters += '0123456789';
+            if (useLetters) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            if (useCharacters) characters += '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
+
+            if (!characters) {
+                return 'Please select at least one option.';
+            }
+
             let result = '';
             for (let i = 0; i < length; i++) {
                 const randomIndex = Math.floor(Math.random() * characters.length);
@@ -39,11 +55,19 @@
 
         document.getElementById('generate').addEventListener('click', () => {
             const length = parseInt(document.getElementById('length').value, 10);
+            const useNumbers = document.getElementById('numbersOnly').checked;
+            const useLetters = document.getElementById('lettersOnly').checked;
+            const useCharacters = document.getElementById('charactersOnly').checked;
+
             if (length > 0) {
-                const code = generateRandomCode(length);
+                const code = generateRandomCode(length, useNumbers, useLetters, useCharacters);
                 document.getElementById('result').textContent = `Generated Code: ${code}`;
-                document.getElementById('copy').disabled = false;
-                document.getElementById('copy').setAttribute('data-code', code);
+                if (code !== 'Please select at least one option.') {
+                    document.getElementById('copy').disabled = false;
+                    document.getElementById('copy').setAttribute('data-code', code);
+                } else {
+                    document.getElementById('copy').disabled = true;
+                }
             } else {
                 document.getElementById('result').textContent = 'Please enter a valid length.';
                 document.getElementById('copy').disabled = true;
@@ -59,7 +83,5 @@
             });
         });
     </script>
-
-    <center>Let's say if someone hacked your account, make sure to generate the code, and copy it, and change your password. To remember the code you generated, use notepad to save your password for it.</center>
 </body>
 </html>
