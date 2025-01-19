@@ -5,234 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Code Generator</title>
     <style>
-
         body {
-
             font-family: Arial, sans-serif;
-
             text-align: center;
-
             margin-top: 50px;
-
         }
-
         #result {
-
             margin-top: 20px;
-
             font-size: 1.5em;
-
             font-weight: bold;
-
             color: #333;
-
         }
-
         #result a {
-
             color: #007BFF;
-
             text-decoration: none;
-
         }
-
         #result a:hover {
-
             text-decoration: underline;
-
         }
-
     </style>
-
 </head>
-
 <body>
-
     <h1>Random Code Generator</h1>
-
     <label for="length">Enter code length:</label>
-
     <input type="number" id="length" min="1" value="5">
-
     <div>
-
         <input type="checkbox" id="numbersOnly">
-
         <label for="numbersOnly">Generate Numbers Only</label>
-
         <input type="checkbox" id="lettersOnly">
-
         <label for="lettersOnly">Generate Letters Only</label>
-
         <input type="checkbox" id="charactersOnly">
-
         <label for="charactersOnly">Generate Characters Only</label>
-
         <input type="checkbox" id="emojisOnly">
-
         <label for="emojisOnly">Generate Emojis Only</label>
-
         <input type="checkbox" id="youtubeOnly">
-
         <label for="youtubeOnly">Generate YouTube Video Only</label>
-
     </div>
-
     <button id="generate">Generate Code</button>
-
     <button id="copy" disabled>Copy</button>
-
     <div id="result"></div>
 
-
-
     <script>
-
         function generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, youtubeOnly) {
-
             if (youtubeOnly) {
-
-                const videoId = Math.random().toString(36).substring(2, 13);
-
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let videoId = '';
+                for (let i = 0; i < 11; i++) {
+                    const randomIndex = Math.floor(Math.random() * characters.length);
+                    videoId += characters[randomIndex];
+                }
                 return `https://www.youtube.com/watch?v=${videoId}`;
-
-            if (youtubeOnly) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let videoId = '';
-    for (let i = 0; i < 11; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        videoId += characters[randomIndex];
-    }
-    return `https://www.youtube.com/watch?v=${videoId}`;
-}
-
             }
-
-
 
             let characters = '';
-
             if (useNumbers) characters += '0123456789';
-
             if (useLetters) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
             if (useCharacters) characters += '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
-
-            if (useEmojis) characters += ''😀🥰😌😢😭😉😍😃😄🤩😋🥺😶😛🤗😁😆🙂😝😟😕😜🙃😅😂☺🤪🙁☹️😎😊🤣😗😇😏😣😖😒🥲😙😚🤭😞😫😩😔🥳😘🤨🤡😳🤥😈👿😬🙄😐😠😡😑😱🤐👹👺🤢😨😯🤬🤯😦😰🤮💩👻😷😥😧😤🥵😮🤤🤧💀☠️🤒😓😲🥶😶‍🌫️🥱😪🤕👽👾🤑😴😮‍💨🧐🤓😵‍💫🤔🤠🤖🎃🥴🤫😵🥸💫💥🌹😿🤛🤜😾🍑💣⭐🌟💯🙈🤲🤞✌👐🙉✅✨⚡❌🙊🙌🤟🤘👏😺💢🌝🌚💨😸🙏👌🤌🤝😹💦🌛🌜💤😻👍🤏👈👎😼🕳️🌞🐸🎉😽👊👉👆✊🙀🎊🔥✍️🖕🦾💪🤙👋🖖🖐🤚✋☝👇🦶🦵🦿🤳💅💍💄💋👄🦷👅👂👥👤🗣️🧠🫁🫀🍆👀👁👣👃🦻🫂👱‍♂️👶👩‍🦳🧒👨‍🦳👦👩‍🦲👧👨‍🦲👨🧔👩🧓👩‍🦱👴👨‍🦱👵👩‍🦰👲👨‍🦰👳‍♀️👱‍♀️👳👨‍🏭👩‍🏭👨‍🏫👩‍🏫👨‍🎤👩‍🎤👨‍🎓👩‍🎓👨‍🍳👩‍🍳👨‍🌾👩‍🌾👩‍💻👨‍💻👩‍💼👨‍💼👩‍🔧👨‍🔧👩‍🔬👨‍🔬👩‍🎨👨‍🎨👩‍🚒👨‍🚒🧝‍♂️🧝‍♀️🧙‍♂️🧙‍♀️🎅🤶👨‍⚖️👩‍⚖️👨‍🚀👩‍🚀👩‍✈️👨‍✈️🧛‍♀️🧛‍♂️🧟‍♀️🧟‍♂️🧞‍♀️🧞‍♂️🧜‍♀️🧜‍♂️🧚‍♀️🧚‍♂️👸🤴🤰👼🤵‍♂️🤵‍♀️🤵👰‍♂️👰‍♀️👰🦹‍♀️🦹‍♂️🦸‍♀️🦸‍♂️👩‍🍼👨‍🍼🙇‍♀️🙇‍♂️💁‍♀️💁‍♂️🙅‍♀️🙅‍♂️🙆‍♀️🙆‍♂️🙋‍♀️🙋‍♂️💇‍♂️💇‍♀️🙍‍♂️🙍‍♀️🙎‍♂️🙎‍♀️🤷‍♂️🤷‍♀️🤦‍♂️🤦‍♀️🧏‍♂️🧏‍♀️💆‍♀️💆‍♂️🧖‍♀️🧖‍♂️💃🕺👯👯‍♂️🕴👩‍🦼👨‍🦼👩‍🦽👫🧍‍♂️🧍‍♀️🏃‍♂️🏃‍♀️🧎‍♂️🧎‍♀️🚶‍♂️🚶‍♀️👨‍🦯👩‍🦯👨‍🦽👭👨‍👩‍👧‍👧👩‍👧🪡🧥👩‍👧‍👦👩‍👩‍👦👬💑👩‍👩‍👧👩‍👦‍👦🥼🦺👩‍👧‍👧👩‍👩‍👧‍👦👩‍❤‍👩👨‍❤‍👨👩‍👩‍👦‍👦👨‍👦👚👕👨‍👧👩‍👩‍👧‍👧💏👩‍❤️‍💋‍👩👨‍👨‍👦👨‍👧‍👦👖🩲👨‍👦‍👦👨‍👨‍👧👨‍❤‍💋‍👨👪👨‍👨‍👧‍👦👨‍👧‍👧🩳👔🪢👨‍👨‍👦‍👦👨‍👩‍👧👨‍👩‍👧‍👦👨‍👨‍👧‍👧🧶👗👙🧵👩‍👦👨‍👩‍👦‍👦👘🧤👜💼🧣🥻🩱👒🧳👓🧢🩴🥿🎩🕶🥽🎓👠👡👑🦯🌂⛑️👢👞🪖☂️♀️🎒👟🥾👝♂️⚧️👛🧦🙂‍↔️🙂‍↕️🐦‍🔥🍋‍🟩🍄‍🟫⛓️‍💥🫨🪪🫧🩻🪫🪩🪬🛟🛞🛝🫙🫗🫘🪺🪷🫃🧋🧌❤️‍🔥❤️‍🩹🪸🥸🫴🫳🥲😵‍💫🫵🫰😮‍💨😶‍🌫️🫶🫣🫡🫥🫤🥹🫦🫱🫲🫢🫠🤙🩼🟰🪯🛜🪇🪈🪮🪭🫚🫛🪻🪼🪽🩵🩶🫸🫷🫏🫎🐦‍⬛🪿🩷❤🧡💛💚💙💜🤎🖤🤍🔴🟠🟡🟢🔵🟣🟤⚫⚪🟥🟧🟨🟩🟦🟪🟫⬛⬜🕧🕦🕥🕤🕣🕢🕡🕠🕟🕞🕝🕜🕛🕚🕙🕘🕗🕖🕕🕔🕓🕒🕑🕐🗯💭💬👁‍🗨📢📣🔕🔔🔊🔜✔️☑️🔘🔺🔻🔈🔇🔉🔝🔛🔙🔚➿➰〰️®️©️🎶➕➖➗✖️♾️💲💱™️🎵🔃🔄🔂🔁🔀⤵️⤴️↩️⬆️⬇️↗️↘️↙️↖️↕️↔️↪️⬅️➡️🔽🔼◀️⏬⏫⏪⏩⏮️⏭️⏺⏹⏯️⏸▶️⏏️*⃣4⃣5⃣6⃣7⃣8⃣9⃣🔟🔢#⃣3⃣2⃣1⃣0⃣🆓🆕🆒🆙🆗🎦📶🈁🔣ℹ️🔤🔡🔠🆖🚮🚻🚼🚺🚹🛅🛄🛃🛂🌀💤🏧🚾♿🅿️🛗🈳🈂️Ⓜ️🌐❎✳️❇️💹🈯✅♻️⁉️🔅🔆〽️⚠️🚸🔱⚜️🔰‼️❔❓❕❗🚭📵🔞🚱🚳🚯🚷♨️💢💯🚫📛⛔🅰️🅱️🆎🆑🅾️🆘❌⭕🛑🈲🈹🈵🈴㊗️㊙️🉐💮🆚☣️📴📳🈶🈚🈸🈺🈷️✴️☢️🉑⚛️🆔♓♒♑♐♏🛐⛎♈♉♊♋♌♍♎☦️☯️🕎🔯✡️☸️🕉☪️✝️🔳🔲♠♣♥♦💌💟☮️◻️◼️◽️◾️▫️▪️💠🔷🔶🔹🔸🏿🏾🏽🏼🏻💝💘❤️‍🔥❤️‍🩹💔❣️💕💞💓💗💖🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐦🐧🐔🐒🙊🙉🙈🐵🐸🐽🐷🐮🐤🪱🐛🐣🐥🦋🐌🦆🦅🐚🦟🦉🦇🐞🐜🐺🐗🪲🦗🐴🦄🕷🕸🐝🐠🦬🦏🐕‍🦺🐇🕊🦮🐘🦓🦐🦞🐅🦣🐩🦩🦢🐕🦘🐆🐙🦑🐊🦒🐑🦜🦚🐏🐫🦭🦀🦤🐐🐪🐋🦂🦃🦙🦛🐳🦕🐓🐖🦌🦈🦖🪶🐎🐄🐬🦎🐈‍⬛🦧🐂🐡🐍🐈🦍🐃🐟🐢🐁🐲🪴🌻🌒🌓🌼🎋🌵🦨🦝🎄🍃🌸🌔🌚🌺🍂🌲🦦🦥🌳🍁🌎🌝🌞🌍🍄🌴🦡🦫🪵🪨🌏🌛🌜🌕🌾🌱🐀🐿🌿💐🌖🌙🪐🌗🌷☘️🦔🐾🍀🌹🌘💫⭐🌑🥀🎍🐉🌈🌫🌦🌪🌥💨⛅🌬🌤❄☀⛄☄️☃️💥🌨🔥🌩☔💦⛈️⚡✨🌧💧🌊☁🌟🍏🍑🫒🥖🫓🧄🥭🍎🍐🍍🧅🥨🧀🌽🥥🍊🍋🥝🌶🥚🍳🫑🥑🍌🍉🍅🥔🧈🥓🍠🍆🍇🍓🥦🌰🥩🥞🥜🥬🫐🍈🥒🥐🧇🍤🍞🥕🍒🌯🍣🥧🍪🍻🍺🦪🍦🥮🌮🧆🥯🍨🥟🍶🧋🍩🍧🍥🥙🍟🍲🍡🍿🥤🧃🍫🍢🍜🍔🌭🍝🥠🍬🍵☕🍭🍘🥫🥪🍕🫕🍚🍮🫖🍼🎂🍙🥘🦴🍖🥗🍛🍰🥛🍯🧁🍱🫔🍗🥂🥡🥢🍷🧂🥃🍸🍹🧉🍾🧊🥄🍴🍽🥣🀄🎴🃏🧩🎰🎮🎳🎯♟️🎧🎼🎹🥁🪘🎷🎺🪗🎸🎻🪕🎲🎤🎬🎨🩰🎭🤹‍♂️🤹‍♀️🎪🎟🎫🎗🏵🧗‍♂️🚴‍♀️🚴🚵‍♀️🚵🎽🏅🎖🥇🥈🥉🏆🧗‍♀️🏇🚣🚣‍♀️🤽‍♂️🤽‍♀️🏊🏊‍♀️🏄🏄‍♀️🧘‍♂️🧘‍♀️🏋🤺🤼‍♀️🤼‍♂️🤸‍♀️🤸‍♂️⛹️‍♀️⛹️‍♂️🤾‍♀️🤾‍♂️🏌‍♀️🏌🏋‍♀️🪂🏂⛷️🎿🛷🥌⛸️🛼🛹🥋🥊🏸⚽🏀🥅🏒🏈⚾🏑🥍🥎🎾🏏🏐🪃🏉⛳🥏🪁🎱🏹🪀🎣🏓🤿🚗🚛🚘🚂🚆🚖🚜🚕🚙🦽🚡🚇🚊🚠🦼🚌🚎🛴🚟🚉🚁🚃🚲🏎🚓🛵🚋🛩✈️🚞🏍🚑🚒🛺🚝🛫🛬🚄🚨🚐🛻🚔🚅🚀🛸🚈🚍🚚🕌🏬🏕🏟🚧⛪🏢🏜🏯🪝🏛🏚🌋🏰⚓🚢🗼🗻🏘💒🏩🏡🏔⛲⛴️🛳🗽⛰️🏠🏫🏪🏭🏝🗿🚤🛥🗺🏖🏗🏨🏦🛣⛱️🚥⛵🛶🚦🎠🛤🏥🏤🛖🎢🚏💺🛰⛽🎡⛺🏣🕍🌇🌆🛕🕋🏙🌃⛩️🗾🌌🎑🌉🏞🌁🌅🌄🌠🎇🎆⌚💾📟⌛⏳📠💿📱📲📀📺📡🔋📻📼💻⌨️📷🎙🔌💡🎚📸🖥🖨📹🎛🔦🕯🧭🎥🖱🖲📽⏱️🪔🧯⏲️🎞🕹🗜📞⏰🗑🛢🕰☎💽🧰⛓️🪦🩺🧻🧺🩹⚰️🧱🪜⚖️🪤🚬🕳️🪠🧹🔬🛡⚙️💎💳🔩⚔️🔭🌡🧪⚗🗡🪚💰🪙⛏️🔪💈🧫🦠🧿🪓🛠💷💶⚒️🧨📿🧬🩸🔮💣🔨💴💵🔧🔫🏺💉💊⚱️🧲🪛💸🚽🔑🛍🎐📫📬🧧🛒🗝🚰🚿🚪🎁✉️📭📮📩🎈🪑🛁🛀🛋🎏📨🪧📯📧🎀🛏🧼🪒🛌🪄💌📜📃📥🪅🧸🧽🪥🪆🎊📤📄📑📦🎉🖼🪣🧴🪞🎎🏷🧾📊📪🏮🪟🛎📁📚✂️🔒🔐📍📙📋🗄📘📌🔏🔎🧮📗🗳🗃📕📏🔍✏️📐📒📇📅📔🖇📝🖍📎📓📆🗓📰🔗🖌✒️🧷🗞🗒📉🗂🔖🖋🖊🔓📖📂📈🏳🏴🏴‍☠️🏁🚩🏳‍🌈🏳️‍⚧️🇦🇫🇦🇽🇦🇱🇩🇿🇦🇸🇧🇸🇦🇿🇦🇹🇦🇺🇦🇼🇦🇲🇦🇷🇦🇬🇦🇶🇦🇮🇦🇴🇦🇩🇧🇭🇧🇷🇮🇴🇧🇩🇧🇧🇻🇬🇧🇳🇧🇾🇧🇪🇧🇬🇧🇫🇧🇿🇧🇯🇧🇮🇰🇭🇧🇲🇧🇹🇨🇲🇨🇦🇧🇴🇧🇦🇮🇨🇨🇻🇧🇼🇨🇩🇩🇴🇫🇮🇬🇱🇭🇺🇭🇰🇬🇷🇫🇯🇩🇲🇨🇬🇰🇲🇩🇯🇫🇴🇬🇮🇭🇳🇭🇹🇬🇭🇫🇰🇩🇰🇨🇴🇨🇨🇨🇿🇪🇺🇩🇪🇬🇾🇬🇼🇬🇪🇪🇹🇨🇾🇨🇽🇨🇳🇨🇼🇪🇪🇬🇲🇬🇳🇬🇬🇬🇦🇪🇷🇨🇺🇨🇱🇹🇩🇭🇷🇬🇶🇹🇫🇬🇹🇬🇺🇵🇫🇸🇻🇨🇮🇨🇫🇰🇾🇨🇷🇪🇬🇬🇫🇬🇵🇬🇩🇫🇷🇪🇨🇨🇰🇧🇶🇮🇸🇯🇪🇱🇷🇲🇹🇲🇸🇲🇦🇲🇭🇱🇾🇯🇴🇮🇳🇮🇩🇰🇿🇱🇮🇲🇶🇲🇿🇲🇲🇲🇷🇱🇹🇰🇪🇮🇷🇮🇶🇰🇮🇱🇺🇲🇺🇳🇦🇳🇷🇾🇹🇲🇴🇽🇰🇮🇪🇮🇲🇰🇼🇲🇰🇲🇽🇳🇵🇳🇱🇫🇲🇲🇬🇰🇬🇮🇱🇮🇹🇱🇦🇲🇼🇲🇩🇳🇨🇳🇿🇲🇨🇲🇾🇱🇻🇯🇲🇯🇵🇱🇧🇲🇻🇲🇳🇳🇮🇳🇪🇲🇪🇲🇱🇱🇸🎌🇳🇬🇵🇾🇼🇸🇬🇸🇵🇲🇻🇨🇸🇧🇸🇲🇵🇪🇳🇺🇳🇫🇵🇭🇸🇹🇸🇴🇸🇩🇸🇷🇿🇦🇸🇦🇵🇳🇰🇵🇲🇵🇵🇱🇸🇳🇰🇷🇸🇿🇸🇪🇸🇸🇷🇸🇵🇹🇳🇴🇴🇲🇵🇷🇸🇨🇪🇸🇨🇭🇸🇾🇱🇰🇸🇱🇶🇦🇵🇰🇵🇼🇷🇪🇸🇬🇧🇱🇹🇼🇹🇯🇸🇭🇸🇽🇷🇴🇵🇸🇵🇦🇷🇺🇸🇰🇰🇳🇹🇿🇹🇭🇱🇨🇸🇮🇷🇼🇵🇬🇺🇬🇻🇪🇻🇮🇻🇦🇹🇻🇻🇺🇹🇨🇺🇿🇹🇲🇺🇾🇹🇷🇺🇸🇹🇳🏴󠁧󠁢󠁷󠁬󠁳󠁿🇿🇼🇿🇲🏴󠁧󠁢󠁳󠁣󠁴󠁿🇹🇹🇹🇴🏴󠁧󠁢󠁥󠁮󠁧󠁿🇾🇪🇪🇭🇬🇧🇹🇰🇹🇬🇦🇪🇼🇫🇻🇳🇺🇦🇹🇱';
-
-
+            if (useEmojis) characters += '😀😂🤣😍😊😎👍💖🔥🎉✨🌟🥳🤩😇🤔🙌💪💯👀🥰🤗😜🐱🐶🐼🍕🍔🍎🍩☀️🌈⚡️⭐️🌀🙂‍↔️🙂‍↕️🩷🩵🩶🫠🎶🎵🎷🎺🥁🎸🎻🎹🎤🎧🎼';
 
             if (!characters) {
-
                 return 'Please select at least one option.';
-
             }
-
-
 
             let result = '';
-
             for (let i = 0; i < length; i++) {
-
                 const randomIndex = Math.floor(Math.random() * characters.length);
-
                 result += characters[randomIndex];
-
             }
-
             return result;
-
         }
 
-
-
         const lengthInput = document.getElementById('length');
-
         const youtubeOnlyCheckbox = document.getElementById('youtubeOnly');
 
-
-
         youtubeOnlyCheckbox.addEventListener('change', () => {
-
             if (youtubeOnlyCheckbox.checked) {
-
                 lengthInput.disabled = true;
-
             } else {
-
                 lengthInput.disabled = false;
-
             }
-
         });
-
-
 
         document.getElementById('generate').addEventListener('click', () => {
-
             const length = parseInt(lengthInput.value, 10);
-
             const useNumbers = document.getElementById('numbersOnly').checked;
-
             const useLetters = document.getElementById('lettersOnly').checked;
-
             const useCharacters = document.getElementById('charactersOnly').checked;
-
             const useEmojis = document.getElementById('emojisOnly').checked;
-
             const youtubeOnly = youtubeOnlyCheckbox.checked;
 
+            let code;
 
-
-            if (youtubeOnly || length > 0) {
-
-                const code = generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, youtubeOnly);
-
-                if (youtubeOnly) {
-
-                    document.getElementById('result').innerHTML = `Generated Code: <a href="${code}" target="_blank">${code}</a>`;
-
-                } else {
-
-                    document.getElementById('result').textContent = `Generated Code: ${code}`;
-
-                }
-
-                document.getElementById('copy').disabled = false;
-
-                document.getElementById('copy').setAttribute('data-code', code);
-
+            if (youtubeOnly) {
+                code = generateRandomCode(11, false, false, false, false, true);
+            } else if (length > 0) {
+                code = generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, false);
             } else {
-
-                document.getElementById('result').textContent = 'Please enter a valid length.';
-
-                document.getElementById('copy').disabled = true;
-
+                code = 'Please enter a valid length.';
             }
 
+            if (youtubeOnly) {
+                document.getElementById('result').innerHTML = `Generated Code: <a href="${code}" target="_blank">${code}</a>`;
+            } else {
+                document.getElementById('result').textContent = `Generated Code: ${code}`;
+            }
+
+            document.getElementById('copy').disabled = code.startsWith('Please') || (youtubeOnly && !code.includes('youtube.com'));
+            document.getElementById('copy').setAttribute('data-code', code);
         });
-
-
 
         document.getElementById('copy').addEventListener('click', () => {
-
             const code = document.getElementById('copy').getAttribute('data-code');
-
             navigator.clipboard.writeText(code).then(() => {
-
                 alert('Code copied to clipboard!');
-
             }).catch(err => {
-
                 alert('Failed to copy the code.');
-
             });
-
         });
-
     </script>
-
 </body>
-
 </html>
-
