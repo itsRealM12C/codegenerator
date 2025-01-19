@@ -31,13 +31,20 @@
         <label for="charactersOnly">Generate Characters Only</label>
         <input type="checkbox" id="emojisOnly">
         <label for="emojisOnly">Generate Emojis Only</label>
+        <input type="checkbox" id="youtubeOnly">
+        <label for="youtubeOnly">Generate YouTube Video Only</label>
     </div>
     <button id="generate">Generate Code</button>
     <button id="copy" disabled>Copy</button>
     <div id="result"></div>
 
     <script>
-        function generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis) {
+        function generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis,youtubeOnly) {
+            if (youtubeOnly) {
+                const videoId = Math.random().toString(36).substring(2, 13);
+                return `https://www.youtube.com/watch?v=${videoId}`;
+            }
+            
             let characters = '';
             if (useNumbers) characters += '0123456789';
             if (useLetters) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
