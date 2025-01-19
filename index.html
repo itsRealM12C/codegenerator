@@ -48,7 +48,7 @@
     <script>
         function generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, youtubeOnly) {
             if (youtubeOnly) {
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
                 let videoId = '';
                 for (let i = 0; i < 11; i++) {
                     const randomIndex = Math.floor(Math.random() * characters.length);
@@ -98,7 +98,7 @@
 
             if (youtubeOnly) {
                 code = generateRandomCode(11, false, false, false, false, true);
-            } else if (length > 0) {
+            } else if (length > 0) 
                 code = generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, false);
             } else {
                 code = 'Please enter a valid length.';
