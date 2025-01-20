@@ -23,6 +23,9 @@
         #result a:hover {
             text-decoration: underline;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -40,13 +43,28 @@
         <label for="emojisOnly">Generate Emojis Only</label>
         <input type="checkbox" id="youtubeOnly">
         <label for="youtubeOnly">Generate YouTube Video Only</label>
+        <input type="checkbox" id="pickingNumber">
+        <label for="pickingNumber">Picking A Number Between</label>
+    </div>
+    <div id="rangeInputs" class="hidden">
+        <label for="min">Minimum:</label>
+        <input type="number" id="min" min="0" value="0">
+        <label for="max">Maximum:</label>
+        <input type="number" id="max" min="1" value="10">
     </div>
     <button id="generate">Generate Code</button>
     <button id="copy" disabled>Copy</button>
     <div id="result"></div>
 
     <script>
-        function generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, youtubeOnly) {
+        function generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, youtubeOnly, pickingNumber, min, max) {
+            if (pickingNumber) {
+                if (min >= max) {
+                    return 'Minimum should be less than Maximum.';
+                }
+                return `Picked Number: ${Math.floor(Math.random() * (max - min + 1)) + min}`;
+            }
+
             if (youtubeOnly) {
                 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
                 let videoId = '';
@@ -77,12 +95,29 @@
 
         const lengthInput = document.getElementById('length');
         const youtubeOnlyCheckbox = document.getElementById('youtubeOnly');
+        const pickingNumberCheckbox = document.getElementById('pickingNumber');
+        const rangeInputs = document.getElementById('rangeInputs');
+        const minInput = document.getElementById('min');
+        const maxInput = document.getElementById('max');
 
         youtubeOnlyCheckbox.addEventListener('change', () => {
             if (youtubeOnlyCheckbox.checked) {
                 lengthInput.disabled = true;
+                pickingNumberCheckbox.checked = false;
+                rangeInputs.classList.add('hidden');
             } else {
                 lengthInput.disabled = false;
+            }
+        });
+
+        pickingNumberCheckbox.addEventListener('change', () => {
+            if (pickingNumberCheckbox.checked) {
+                lengthInput.disabled = true;
+                youtubeOnlyCheckbox.checked = false;
+                rangeInputs.classList.remove('hidden');
+            } else {
+                lengthInput.disabled = false;
+                rangeInputs.classList.add('hidden');
             }
         });
 
@@ -93,25 +128,25 @@
             const useCharacters = document.getElementById('charactersOnly').checked;
             const useEmojis = document.getElementById('emojisOnly').checked;
             const youtubeOnly = youtubeOnlyCheckbox.checked;
+            const pickingNumber = pickingNumberCheckbox.checked;
+            const min = parseInt(minInput.value, 10);
+            const max = parseInt(maxInput.value, 10);
 
             let code;
 
-            if (youtubeOnly) {
-                code = generateRandomCode(11, false, false, false, false, true);
-            } else if (length > 0) {
-                code = generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, false);
+            if (youtubeOnly || pickingNumber || length > 0) {
+                code = generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, youtubeOnly, pickingNumber, min, max);
+                if (youtubeOnly) {
+                    document.getElementById('result').innerHTML = `Generated Code: <a href="${code}" target="_blank">${code}</a>`;
+                } else {
+                    document.getElementById('result').textContent = code;
+                }
+                document.getElementById('copy').disabled = code.startsWith('Please') || (youtubeOnly && !code.includes('youtube.com'));
+                document.getElementById('copy').setAttribute('data-code', code);
             } else {
-                code = 'Please enter a valid length.';
+                document.getElementById('result').textContent = 'Please enter a valid length.';
+                document.getElementById('copy').disabled = true;
             }
-
-            if (youtubeOnly) {
-                document.getElementById('result').innerHTML = `Generated Code: <a href="${code}" target="_blank">${code}</a>`;
-            } else {
-                document.getElementById('result').textContent = `Generated Code: ${code}`;
-            }
-
-            document.getElementById('copy').disabled = code.startsWith('Please') || (youtubeOnly && !code.includes('youtube.com'));
-            document.getElementById('copy').setAttribute('data-code', code);
         });
 
         document.getElementById('copy').addEventListener('click', () => {
