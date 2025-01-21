@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Code, Text Generator</title>
+    <title>Random Code Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,6 +53,8 @@
         <label for="animalNames">Generate Animal Names Only</label>
         <input type="checkbox" id="birdNames">
         <label for="birdNames">Generate Bird Name Only</label>
+        <input type="checkbox" id="dateTimeOnly">
+        <label for="dateTimeOnly">Generate Date and Time Only</label>
     </div>
     <div id="rangeInputs" class="hidden">
         <label for="min">Minimum:</label>
@@ -100,6 +102,19 @@
             return birds[category][Math.floor(Math.random() * birds[category].length)];
         }
 
+        function generateDateTime() {
+            const date = new Date();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const year = date.getFullYear();
+            const month = months[date.getMonth()];
+            const day = date.getDate();
+            const dayName = days[date.getDay()];
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year} ${month} ${day} ${hours}:${minutes} ${dayName}`;
+        }
+
         const lengthInput = document.getElementById('length');
         const youtubeOnlyCheckbox = document.getElementById('youtubeOnly');
         const pickingNumberCheckbox = document.getElementById('pickingNumber');
@@ -107,6 +122,7 @@
         const humanNamesCheckbox = document.getElementById('humanNames');
         const animalNamesCheckbox = document.getElementById('animalNames');
         const birdNamesCheckbox = document.getElementById('birdNames');
+        const dateTimeOnlyCheckbox = document.getElementById('dateTimeOnly');
         const rangeInputs = document.getElementById('rangeInputs');
         const birdCategories = document.getElementById('birdCategories');
         let selectedBirdCategory = '';
@@ -116,6 +132,7 @@
                 lengthInput.disabled = true;
                 pickingNumberCheckbox.checked = false;
                 birdNamesCheckbox.checked = false;
+                dateTimeOnlyCheckbox.checked = false;
                 birdCategories.classList.add('hidden');
                 rangeInputs.classList.add('hidden');
             } else {
@@ -128,6 +145,7 @@
                 lengthInput.disabled = true;
                 youtubeOnlyCheckbox.checked = false;
                 birdNamesCheckbox.checked = false;
+                dateTimeOnlyCheckbox.checked = false;
                 birdCategories.classList.add('hidden');
                 rangeInputs.classList.remove('hidden');
             } else {
@@ -144,11 +162,25 @@
                 randomWordCheckbox.checked = false;
                 humanNamesCheckbox.checked = false;
                 animalNamesCheckbox.checked = false;
+                dateTimeOnlyCheckbox.checked = false;
                 rangeInputs.classList.add('hidden');
                 birdCategories.classList.remove('hidden');
             } else {
                 lengthInput.disabled = false;
                 birdCategories.classList.add('hidden');
+            }
+        });
+
+        dateTimeOnlyCheckbox.addEventListener('change', () => {
+            if (dateTimeOnlyCheckbox.checked) {
+                lengthInput.disabled = true;
+                youtubeOnlyCheckbox.checked = false;
+                pickingNumberCheckbox.checked = false;
+                birdNamesCheckbox.checked = false;
+                birdCategories.classList.add('hidden');
+                rangeInputs.classList.add('hidden');
+            } else {
+                lengthInput.disabled = false;
             }
         });
 
@@ -167,10 +199,13 @@
             const useHumanNames = humanNamesCheckbox.checked;
             const useAnimalNames = animalNamesCheckbox.checked;
             const useBirdNames = birdNamesCheckbox.checked;
+            const useDateTimeOnly = dateTimeOnlyCheckbox.checked;
 
             let code;
 
-            if (useBirdNames) {
+            if (useDateTimeOnly) {
+                code = generateDateTime();
+            } else if (useBirdNames) {
                 if (!selectedBirdCategory) {
                     code = 'Please select a bird category.';
                 } else {
@@ -207,12 +242,4 @@
 
         document.getElementById('copy').addEventListener('click', () => {
             const code = document.getElementById('copy').getAttribute('data-code');
-            navigator.clipboard.writeText(code).then(() => {
-                alert('Code copied to clipboard!');
-            }).catch(err => {
-                alert('Failed to copy the code.');
-            });
-        });
-    </script>
-</body>
-</html>
+            navigator.clipboard.writeText(code).
