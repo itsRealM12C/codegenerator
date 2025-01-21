@@ -70,6 +70,16 @@
         <button id="africa">Africa</button>
         <button id="australia">Australia</button>
     </div>
+    <div id="dateTimeOptions" class="hidden">
+        <label for="dateTimeType">Select Type:</label>
+        <select id="dateTimeType">
+            <option value="year">Year</option>
+            <option value="month">Month</option>
+            <option value="week">Week</option>
+            <option value="day">Day</option>
+            <option value="time">Time</option>
+        </select>
+    </div>
     <button id="generate">Generate Code</button>
     <button id="copy" disabled>Copy</button>
     <div id="result"></div>
@@ -93,26 +103,35 @@
         function generateBirdName(category) {
             const birds = {
                 southAmerica: ['Toucan', 'Andean Condor', 'Hoatzin', 'Scarlet Macaw', 'Harpy Eagle'],
-                northAmerica: ['Bald Eagle', 'Northern Cardinal', 'Peregrine Falcon', 'Blue Jay', 'Canada Goose'],
-                europe: ['European Jay', 'Barn Swallow', 'Common Nightingale', 'European Robin', 'Golden Eagle'],
+                northAmerica: ['Bald Eagle', 'Northern Cardinal', 'Peregrine Falcon', 'Blue Jay', 'Canada Goose', 'Mourning Dove', 'European Starling', 'Black-capped Chickadee'],
+                europe: ['European Jay', 'Barn Swallow', 'Common Nightingale', 'European Robin', 'Golden Eagle', 'Eurasian Blue Tit', 'Great Tit', 'Long-tailed Tit', 'Coal Tit', 'Eurasian Collared Dove', 'Rock Pigeon'],
                 asia: ['Peacock', 'Siberian Crane', 'Indian Roller', 'Mandarin Duck', 'White-bellied Heron'],
                 africa: ['Ostrich', 'Secretary Bird', 'Marabou Stork', 'African Grey Parrot', 'Shoebill'],
-                australia: ['Kookaburra', 'Emu', 'Rainbow Lorikeet', 'Cockatoo', 'Fairy Wren']
+                australia['Kookaburra', 'Emu', 'Rainbow Lorikeet', 'Cockatoo', 'Fairy Wren']
             };
             return birds[category][Math.floor(Math.random() * birds[category].length)];
         }
 
-        function generateDateTime() {
+        function generateDateTime(type) {
             const date = new Date();
             const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const year = date.getFullYear();
-            const month = months[date.getMonth()];
-            const day = date.getDate();
-            const dayName = days[date.getDay()];
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            return `${year} ${month} ${day} ${hours}:${minutes} ${dayName}`;
+        
+
+            switch (type) {
+                case 'year':
+                    return date.getFullYear();
+                case 'month':
+                    return `${months[date.getMonth()]} ${date.getFullYear()}`;
+                case 'week':
+                    return `Week ${Math.ceil(date.getDate() / 7)} of ${months[date.getMonth()]} ${date.getFullYear()}`;
+                case 'day':
+                    return `${days[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+                case 'time':
+                    return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                default:
+                    return `${date.getFullYear()} ${months[date.getMonth()]} ${date.getDate()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} ${days[date.getDay()]}`;
+            }
         }
 
         const lengthInput = document.getElementById('length');
@@ -125,6 +144,8 @@
         const dateTimeOnlyCheckbox = document.getElementById('dateTimeOnly');
         const rangeInputs = document.getElementById('rangeInputs');
         const birdCategories = document.getElementById('birdCategories');
+        const dateTimeOptions = document.getElementById('dateTimeOptions');
+        const dateTimeType = document.getElementById('dateTimeType');
         let selectedBirdCategory = '';
 
         youtubeOnlyCheckbox.addEventListener('change', () => {
@@ -135,6 +156,7 @@
                 dateTimeOnlyCheckbox.checked = false;
                 birdCategories.classList.add('hidden');
                 rangeInputs.classList.add('hidden');
+                dateTimeOptions.classList.add('hidden');
             } else {
                 lengthInput.disabled = false;
             }
@@ -148,6 +170,7 @@
                 dateTimeOnlyCheckbox.checked = false;
                 birdCategories.classList.add('hidden');
                 rangeInputs.classList.remove('hidden');
+                dateTimeOptions.classList.add('hidden');
             } else {
                 lengthInput.disabled = false;
                 rangeInputs.classList.add('hidden');
@@ -165,6 +188,7 @@
                 dateTimeOnlyCheckbox.checked = false;
                 rangeInputs.classList.add('hidden');
                 birdCategories.classList.remove('hidden');
+                dateTimeOptions.classList.add('hidden');
             } else {
                 lengthInput.disabled = false;
                 birdCategories.classList.add('hidden');
@@ -179,8 +203,10 @@
                 birdNamesCheckbox.checked = false;
                 birdCategories.classList.add('hidden');
                 rangeInputs.classList.add('hidden');
+                dateTimeOptions.classList.remove('hidden');
             } else {
                 lengthInput.disabled = false;
+                dateTimeOptions.classList.add('hidden');
             }
         });
 
@@ -192,54 +218,4 @@
         document.getElementById('australia').addEventListener('click', () => selectedBirdCategory = 'australia');
 
         document.getElementById('generate').addEventListener('click', () => {
-            const length = parseInt(lengthInput.value, 10);
-            const pickingNumber = pickingNumberCheckbox.checked;
-            const youtubeOnly = youtubeOnlyCheckbox.checked;
-            const useRandomWord = randomWordCheckbox.checked;
-            const useHumanNames = humanNamesCheckbox.checked;
-            const useAnimalNames = animalNamesCheckbox.checked;
-            const useBirdNames = birdNamesCheckbox.checked;
-            const useDateTimeOnly = dateTimeOnlyCheckbox.checked;
-
-            let code;
-
-            if (useDateTimeOnly) {
-                code = generateDateTime();
-            } else if (useBirdNames) {
-                if (!selectedBirdCategory) {
-                    code = 'Please select a bird category.';
-                } else {
-                    code = generateBirdName(selectedBirdCategory);
-                }
-            } else if (useRandomWord) {
-                code = generateRandomWord();
-            } else if (useHumanNames) {
-                code = generateHumanName();
-            } else if (useAnimalNames) {
-                code = generateAnimalName();
-            } else if (youtubeOnly || pickingNumber || length > 0) {
-                code = generateRandomCode(length, 
-                    document.getElementById('numbersOnly').checked, 
-                    document.getElementById('lettersOnly').checked, 
-                    document.getElementById('charactersOnly').checked, 
-                    document.getElementById('emojisOnly').checked, 
-                    youtubeOnly, pickingNumber, 
-                    parseInt(document.getElementById('min').value, 10), 
-                    parseInt(document.getElementById('max').value, 10)
-                );
-                if (youtubeOnly) {
-                    document.getElementById('result').innerHTML = `Generated Code: <a href="${code}" target="_blank">${code}</a>`;
-                    return;
-                }
-            } else {
-                code = 'Please enter a valid length.';
-            }
-
-            document.getElementById('result').textContent = code;
-            document.getElementById('copy').disabled = code.startsWith('Please');
-            document.getElementById('copy').setAttribute('data-code', code);
-        });
-
-        document.getElementById('copy').addEventListener('click', () => {
-            const code = document.getElementById('copy').getAttribute('data-code');
-            navigator.clipboard.writeText(code).
+            const length = parseInt(lengthInput
