@@ -45,14 +45,6 @@
         <label for="youtubeOnly">Generate YouTube Video Only</label>
         <input type="checkbox" id="pickingNumber">
         <label for="pickingNumber">Picking A Number Between</label>
-        <input type="checkbox" id="randomWord">
-        <label for="randomWord">Generate Random Word Only</label>
-        <input type="checkbox" id="humanNames">
-        <label for="humanNames">Generate Human Names Only</label>
-        <input type="checkbox" id="animalNames">
-        <label for="animalNames">Generate Animal Names Only</label>
-        <input type="checkbox" id="birdNames">
-        <label for="birdNames">Generate Bird Name Only</label>
     </div>
     <div id="rangeInputs" class="hidden">
         <label for="min">Minimum:</label>
@@ -60,63 +52,58 @@
         <label for="max">Maximum:</label>
         <input type="number" id="max" min="1" value="10">
     </div>
-    <div id="birdCategories" class="hidden">
-        <button id="southAmerica">South America</button>
-        <button id="northAmerica">North America</button>
-        <button id="europe">Europe</button>
-        <button id="asia">Asia</button>
-        <button id="africa">Africa</button>
-        <button id="australia">Australia</button>
-    </div>
     <button id="generate">Generate Code</button>
     <button id="copy" disabled>Copy</button>
     <div id="result"></div>
 
     <script>
-        function generateRandomWord() {
-            const words = ['Around', 'Bright', 'Circle', 'Dream', 'Eager', 'Fancy', 'Glide', 'Happy', 'Idea', 'Jump', 'Knowledge', 'Laughter', 'Mystery', 'Nature', 'Opportunity', 'Peace', 'Quest', 'Radiance', 'Serenity', 'Tranquility', 'Understanding', 'Victory', 'Wisdom', 'Xenon', 'Yearning', 'Zeal'];
-            return words[Math.floor(Math.random() * words.length)];
-        }
+        function generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, youtubeOnly, pickingNumber, min, max) {
+            if (pickingNumber) {
+                if (min >= max) {
+                    return 'Minimum should be less than Maximum.';
+                }
+                return `Picked Number: ${Math.floor(Math.random() * (max - min + 1)) + min}`;
+            }
 
-        function generateHumanName() {
-            const names = ['Alex', 'Chris', 'Taylor', 'Jordan', 'Morgan', 'Sydney', 'Ryan', 'Casey', 'Jamie', 'Dylan', 'Avery', 'Bailey', 'Cameron', 'Dakota', 'Emerson', 'Finley', 'Harper', 'Kendall', 'Logan', 'Parker', 'Quinn', 'Riley', 'Skylar', 'Tanner', 'Vivian'];
-            return names[Math.floor(Math.random() * names.length)];
-        }
+            if (youtubeOnly) {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+                let videoId = '';
+                for (let i = 0; i < 11; i++) {
+                    const randomIndex = Math.floor(Math.random() * characters.length);
+                    videoId += characters[randomIndex];
+                }
+                return `https://www.youtube.com/watch?v=${videoId}`;
+            }
 
-        function generateAnimalName() {
-            const animals = ['Sheep', 'Tiger', 'Elephant', 'Kangaroo', 'Panda', 'Lion', 'Zebra', 'Giraffe', 'Dog', 'Cat', 'Wolf', 'Fox', 'Bear', 'Rabbit', 'Otter', 'Deer', 'Horse', 'Hawk', 'Eagle', 'Dolphin', 'Whale', 'Shark', 'Penguin', 'Cheetah', 'Koala'];
-            return animals[Math.floor(Math.random() * animals.length)];
-        }
+            let characters = '';
+            if (useNumbers) characters += '0123456789';
+            if (useLetters) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            if (useCharacters) characters += '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
+            if (useEmojis) characters += '😀😂🤣😍😊😎👍💖🔥🎉✨🌟🥳🤩😇🤔🙌💪💯👀🥰🤗😜🐱🐶🐼🍕🍔🍎🍩☀️🌈⚡️⭐️🌀🙂‍↔️🙂‍↕️🩷🩵🩶🫠🎶🎵🎷🎺🥁🎸🎻🎹🎤🎧🎼';
 
-        function generateBirdName(category) {
-            const birds = {
-                southAmerica: ['Toucan', 'Andean Condor', 'Hoatzin', 'Scarlet Macaw', 'Harpy Eagle'],
-                northAmerica: ['Black-capped Chickadee', 'Tufted Titmouse', 'Northern Cardinal', 'Peregrine Falcon', 'Blue Jay', 'Canada Goose'],
-                europe: ['Blue Tit', 'Great Tit', 'Coal Tit', 'Eurasian Collared Dove', 'Long-tailed Tit', 'European Starling', 'Rock Pigeon'],
-                asia: ['Peacock', 'Siberian Crane', 'Indian Roller', 'Mandarin Duck', 'White-bellied Heron'],
-                africa: ['Ostrich', 'Secretary Bird', 'Marabou Stork', 'African Grey Parrot', 'Shoebill'],
-                australia: ['Kookaburra', 'Emu', 'Rainbow Lorikeet', 'Cockatoo', 'Fairy Wren']
-            };
-            return birds[category][Math.floor(Math.random() * birds[category].length)];
+            if (!characters) {
+                return 'Please select at least one option.';
+            }
+
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                result += characters[randomIndex];
+            }
+            return result;
         }
 
         const lengthInput = document.getElementById('length');
         const youtubeOnlyCheckbox = document.getElementById('youtubeOnly');
         const pickingNumberCheckbox = document.getElementById('pickingNumber');
-        const randomWordCheckbox = document.getElementById('randomWord');
-        const humanNamesCheckbox = document.getElementById('humanNames');
-        const animalNamesCheckbox = document.getElementById('animalNames');
-        const birdNamesCheckbox = document.getElementById('birdNames');
         const rangeInputs = document.getElementById('rangeInputs');
-        const birdCategories = document.getElementById('birdCategories');
-        let selectedBirdCategory = '';
+        const minInput = document.getElementById('min');
+        const maxInput = document.getElementById('max');
 
         youtubeOnlyCheckbox.addEventListener('change', () => {
             if (youtubeOnlyCheckbox.checked) {
                 lengthInput.disabled = true;
                 pickingNumberCheckbox.checked = false;
-                birdNamesCheckbox.checked = false;
-                birdCategories.classList.add('hidden');
                 rangeInputs.classList.add('hidden');
             } else {
                 lengthInput.disabled = false;
@@ -127,101 +114,47 @@
             if (pickingNumberCheckbox.checked) {
                 lengthInput.disabled = true;
                 youtubeOnlyCheckbox.checked = false;
-                birdNamesCheckbox.checked = false;
                 rangeInputs.classList.remove('hidden');
-                birdCategories.classList.add('hidden');
             } else {
                 lengthInput.disabled = false;
                 rangeInputs.classList.add('hidden');
             }
         });
-
-        birdNamesCheckbox.addEventListener('change', () => {
-            if (birdNamesCheckbox.checked) {
-                lengthInput.disabled = true;
-                youtubeOnlyCheckbox.checked = false;
-                pickingNumberCheckbox.checked = false;
-                randomWordCheckbox.checked = false;
-                humanNamesCheckbox.checked = false;
-                animalNamesCheckbox.checked = false;
-                rangeInputs.classList.add('hidden');
-                birdCategories.classList.remove('hidden');
-            } else {
-                lengthInput.disabled = false;
-                birdCategories.classList.add('hidden');
-            }
-        });
-
-        document.getElementById('southAmerica').addEventListener('click', () => selectedBirdCategory = 'southAmerica');
-        document.getElementById('northAmerica').addEventListener('click', () => selectedBirdCategory = 'northAmerica');
-        document.getElementById('europe').addEventListener('click', () => selectedBirdCategory = 'europe');
-        document.getElementById('asia').addEventListener('click', () => selectedBirdCategory = 'asia');
-        document.getElementById('africa').addEventListener('click', () => selectedBirdCategory = 'africa');
-        document.getElementById('australia').addEventListener('click', () => selectedBirdCategory = 'australia');
 
         document.getElementById('generate').addEventListener('click', () => {
-            let result = '';
+            const length = parseInt(lengthInput.value, 10);
+            const useNumbers = document.getElementById('numbersOnly').checked;
+            const useLetters = document.getElementById('lettersOnly').checked;
+            const useCharacters = document.getElementById('charactersOnly').checked;
+            const useEmojis = document.getElementById('emojisOnly').checked;
+            const youtubeOnly = youtubeOnlyCheckbox.checked;
+            const pickingNumber = pickingNumberCheckbox.checked;
+            const min = parseInt(minInput.value, 10);
+            const max = parseInt(maxInput.value, 10);
 
-            if (youtubeOnlyCheckbox.checked) {
-                const youtubeChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-';
-                let youtubeId = '';
-                for (let i = 0; i < 11; i++) {
-                    youtubeId += youtubeChars.charAt(Math.floor(Math.random() * youtubeChars.length));
-                }
-                result = `https://www.youtube.com/watch?v=${youtubeId}`;
-            } else if (pickingNumberCheckbox.checked) {
-                const min = parseInt(document.getElementById('min').value, 10);
-                const max = parseInt(document.getElementById('max').value, 10);
-                result = Math.floor(Math.random() * (max - min + 1)) + min;
-            } else if (randomWordCheckbox.checked) {
-                result = generateRandomWord();
-            } else if (humanNamesCheckbox.checked) {
-                result = generateHumanName();
-            } else if (animalNamesCheckbox.checked) {
-                result = generateAnimalName();
-            } else if (birdNamesCheckbox.checked) {
-                if (selectedBirdCategory) {
-                    result = generateBirdName(selectedBirdCategory);
+            let code;
+
+            if (youtubeOnly || pickingNumber || length > 0) {
+                code = generateRandomCode(length, useNumbers, useLetters, useCharacters, useEmojis, youtubeOnly, pickingNumber, min, max);
+                if (youtubeOnly) {
+                    document.getElementById('result').innerHTML = `Generated Code: <a href="${code}" target="_blank">${code}</a>`;
                 } else {
-                    alert('Please select a bird category.');
+                    document.getElementById('result').textContent = code;
                 }
+                document.getElementById('copy').disabled = code.startsWith('Please') || (youtubeOnly && !code.includes('youtube.com'));
+                document.getElementById('copy').setAttribute('data-code', code);
             } else {
-                const length = parseInt(lengthInput.value, 10);
-                const numbersOnly = document.getElementById('numbersOnly').checked;
-                const lettersOnly = document.getElementById('lettersOnly').checked;
-                const charactersOnly = document.getElementById('charactersOnly').checked;
-                const emojisOnly = document.getElementById('emojisOnly').checked;
-                const numbers = '0123456789';
-                const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                const characters = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
-                const emojis = ['🙂', '😂', '😍', '😒', '😭', '😊', '😎', '😡', '🙄', '😴', '🤔', '😱', '🥳', '🤯', '😷', '🤩'];
-
-                let charset = '';
-                if (numbersOnly) charset = numbers;
-                else if (lettersOnly) charset = letters;
-                else if (charactersOnly) charset = characters;
-                else if (emojisOnly) charset = emojis.join('');
-                else charset = numbers + letters + characters;
-
-                for (let i = 0; i < length; i++) {
-                    result += charset.charAt(Math.floor(Math.random() * charset.length));
-                }
+                document.getElementById('result').textContent = 'Please enter a valid length.';
+                document.getElementById('copy').disabled = true;
             }
-
-            const resultDiv = document.getElementById('result');
-            if (result.startsWith('http')) {
-                resultDiv.innerHTML = `<a href="${result}" target="_blank">${result}</a>`;
-            } else {
-                resultDiv.textContent = result;
-            }
-
-            document.getElementById('copy').disabled = false;
         });
 
         document.getElementById('copy').addEventListener('click', () => {
-            const resultDiv = document.getElementById('result');
-            navigator.clipboard.writeText(resultDiv.textContent || resultDiv.innerText).then(() => {
-                alert('Copied to clipboard!');
+            const code = document.getElementById('copy').getAttribute('data-code');
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Code copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy the code.');
             });
         });
     </script>
